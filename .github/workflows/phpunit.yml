@@ -1,51 +1,31 @@
-name: PHPUnit
+name: Run PHPUnit Tests
 
 on:
+  push:
+    branches:
+      - main  # ou la branche sur laquelle vous souhaitez exécuter les tests
   pull_request:
     branches:
-      - develop
+      - main  # ou la branche sur laquelle vous souhaitez exécuter les tests
 
 jobs:
-  main:
-    name: Build and test
-
-    strategy:
-      matrix:
-        php-versions: ['8.1', '8.3']
-
-    runs-on: ubuntu-latest
-
-    if: (! contains(github.event.head_commit.message, '[ci skip]'))
+  phpunit:
+    runs-on: ubuntu-latest  # Utilise un environnement Ubuntu pour exécuter le test
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4  # Clone le code source du dépôt
 
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v4 # Installe PHP
         with:
-          php-version: ${{ matrix.php-versions }}
-          tools: composer, pecl, phpunit
-          extensions: intl, json, mbstring, mysqlnd, xdebug, xml, sqlite3
-          coverage: xdebug
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Cache composer dependencies
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          php-version: '.2.12 '  # Indique la version de PHP que vous utilisez
 
       - name: Install dependencies
-        run: composer install --no-progress --no-interaction --prefer-dist --optimize-autoloader
-        # To prevent rate limiting you may need to supply an OAuth token in Settings > Secrets
-        # env:
-          # https://getcomposer.org/doc/articles/troubleshooting.md#api-rate-limit-and-oauth-tokens
-          # COMPOSER_AUTH: ${{ secrets.COMPOSER_AUTH }}
+        run: |
+          sudo apt-get install -y libxml2-dev
+          composer install --no-interaction  # Installe les dépendances via Composer
 
-      - name: Test with phpunit
-        run: vendor/bin/phpunit --coverage-text
+      - name: Run PHPUnit tests
+        run: |
+          ./vendor/bin/phpunit --configuration phpunit.xml.dist  # Exécute PHPUnit avec votre fichier de configuration

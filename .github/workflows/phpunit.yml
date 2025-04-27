@@ -14,12 +14,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4  # Clone le code source du dépôt
+        uses: actions/checkout@v3  # Clone le code source du dépôt
 
       - name: Set up PHP
-        uses: shivammathur/setup-php@v4 # Installe PHP
+        uses: shivammathur/setup-php@v2  # Utilisation de la version stable v2
         with:
-          php-version: '.2.12 '  # Indique la version de PHP que vous utilisez
+          php-version: '8.2'  # Version de PHP (corrigée pour enlever l'espace supplémentaire)
+          extensions: mbstring, xml, curl  # Si vous avez besoin d'extensions spécifiques, ajoutez-les ici
+          coverage: xdebug  # Active la couverture de code (si vous en avez besoin)
 
       - name: Install dependencies
         run: |

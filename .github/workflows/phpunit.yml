@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main  # ou la branche sur laquelle vous souhaitez exécuter les tests
+      - hatim
   pull_request:
     branches:
       - main  # ou la branche sur laquelle vous souhaitez exécuter les tests
+      - hatim
 
 jobs:
   phpunit:

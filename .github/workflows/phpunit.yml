@@ -18,6 +18,7 @@ jobs:
       mysql:
         image: mysql:8
         env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: db_tdevops
         ports:
           - 3306:3306

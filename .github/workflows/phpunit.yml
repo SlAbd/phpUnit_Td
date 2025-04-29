@@ -27,8 +27,9 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
           sudo apt-get install -y libxml2-dev
-          composer install --no-interaction
+          composer install --no-interaction --prefer-dist
 
       - name: Run PHPUnit tests
         run: |

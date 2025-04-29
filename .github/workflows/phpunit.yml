@@ -32,4 +32,4 @@ jobs:
 
       - name: Run PHPUnit tests
         run: |
-          ./vendor/bin/phpunit --configuration phpunit.xml.dist --verbose
+          ./vendor/bin/phpunit --configuration phpunit.xml.dist

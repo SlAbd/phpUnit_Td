@@ -14,6 +14,19 @@ jobs:
   phpunit:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_DATABASE: db_tdevops
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -30,6 +43,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libxml2-dev
           composer install --no-interaction --prefer-dist
+
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysqladmin ping --host=localhost --user=root --silent; do
+            echo "Waiting for MySQL to be ready..."
+            sleep 5
+          done
 
       - name: Run PHPUnit tests
         run: |

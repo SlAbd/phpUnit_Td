@@ -24,9 +24,9 @@ jobs:
           - 3306:3306
         options: >-
           --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+          --health-interval=20s
+          --health-timeout=10s
+          --health-retries=5
 
     steps:
       - name: Checkout repository
@@ -45,9 +45,9 @@ jobs:
           sudo apt-get install -y libxml2-dev
           composer install --no-interaction --prefer-dist
 
-      - name: Wait for MySQL to be ready
+      - name: Wait for MySQL to be ready (using nc)
         run: |
-          until mysqladmin ping --host=localhost --user=root --silent; do
+          while ! nc -z localhost 3306; do
             echo "Waiting for MySQL to be ready..."
             sleep 5
           done

@@ -1,0 +1,5 @@
+notepad .gitignore
+vendor/
+composer.lock
+.env
+*.log
